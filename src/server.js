@@ -4,6 +4,8 @@ const express = require('express');
 // importa a conexão feita no arquivo database
 const connectDatabase = require('./config/database');
 
+const rateLimit = require('./config/security')
+
 // importa pessoa do arquivo pessoa
 const Pessoa = require('./models/pessoa');
 
@@ -12,6 +14,8 @@ const app = express();
 
 // setando um valor para a porta de conexão
 const PORT = 3000;
+
+app.use(rateLimit);
 
 // processo os dados para JSON
 app.use(express.json());
