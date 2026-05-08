@@ -1,8 +1,11 @@
 // importa o express para o código
 const express = require('express');
 
+
 // importa a conexão feita no arquivo database
 const connectDatabase = require('./config/database');
+
+const limiter = require('./config/security');
 
 // importa pessoa do arquivo pessoa
 const Pessoa = require('./models/pessoa');
@@ -15,6 +18,8 @@ const PORT = 3000;
 
 // processo os dados para JSON
 app.use(express.json());
+
+app.use(limiter)
 
 // mensagem que vai aparecer ao entrar na rota '/'
 app.get('/', (req, res) => {
