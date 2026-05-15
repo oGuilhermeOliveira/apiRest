@@ -44,6 +44,71 @@ app.get('/pessoas', async (req, res) => {
   }
 });
 
+app.post('/pessoas', async (req, res) => {
+  try {
+    const { nome, sobrenome } = req.body;
+
+    if (!nome || !sobrenome) {
+      return res.status(400).json({
+        mensagem: 'Os campos nome e sobrenome sao obrigatorios.',
+      });
+    }
+
+    const novaPessoa = await Pessoa.create({ nome, sobrenome });
+
+    res.status(201).json(novaPessoa);
+  } catch (error) {
+    res.status(500).json({
+      mensagem: 'Erro ao cadastrar pessoa.',
+      erro: error.message,
+    });
+  }
+});
+
+app.put('/pessoas/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nome, sobrenome } = req.body;
+
+    const editarPessoa = await Pessoa.findByIdAndUpdate(
+      id,
+      { nome, sobrenome },
+      { returnDocument: 'after' } 
+    );
+
+    res.status(200).json(editarPessoa);
+
+  } catch (error) {
+    res.status(500).json({
+      mensagem: 'Erro ao editar pessoa.',
+      erro: error.message,
+    });
+  }
+});
+
+app.delete('/pessoas/:id', async (req, res) => {
+  try {
+    const { id } = req.params;
+    const { nome, sobrenome } = req.body;
+
+    const deletarPessoa = await Pessoa.findByIdAndDelete(
+      id,
+      { nome, sobrenome },
+      { returnDocument: 'after' } 
+    );
+
+    res.status(200).json({
+      mensagem: 'Pessoa deletada com sucesso'
+    });
+
+  } catch (error) {
+    res.status(500).json({
+      mensagem: 'Erro ao editar pessoa.',
+      erro: error.message,
+    });
+  }
+});
+
 // faz a conexão e sobe o projeto para o localhost
 async function startServer() {
   try {
